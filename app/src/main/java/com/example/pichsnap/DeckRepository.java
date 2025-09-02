@@ -4,6 +4,7 @@ package com.example.pichsnap;
 import android.app.Application;
 import android.content.ContentResolver;
 import android.net.Uri;
+import android.os.Build;
 
 import androidx.annotation.WorkerThread;
 import androidx.room.Room;
@@ -41,7 +42,10 @@ public class DeckRepository {
     public SummaryResponse summarize(Uri uri, String fileName) throws Exception {
         ContentResolver cr = app.getContentResolver();
         InputStream is = cr.openInputStream(uri);
-        byte[] bytes = is.readAllBytes();
+        byte[] bytes = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            bytes = is.readAllBytes();
+        }
 
         RequestBody body = RequestBody.create(bytes, MediaType.parse("application/pdf"));
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", fileName, body);

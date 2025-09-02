@@ -45,5 +45,7 @@ PichSnap is a mobile-first tool for investors and founders to **import a pitch d
 - Local cache via Room DB
 
 ---
-
+![Braydon's GitHub Banner](./alazarheader.jpg)
+---
 ## 📂 Project Structure (Android)
+

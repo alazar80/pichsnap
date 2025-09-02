@@ -17,15 +17,15 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // --- values used in ApiClient/DeckRepository ---
+        // used in ApiClient/DeckRepository
         buildConfigField("String", "BACKEND_BASE_URL", "\"http://10.0.2.2:3000/\"")
         buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"CHANGE_ME_DEV_TOKEN\"")
     }
 
     buildTypes {
         debug {
-            // keep local base URL for emulator
-            buildConfigField("String", "BACKEND_BASE_URL", "\"http://10.0.2.2:3000/\"")
+            buildConfigField("String", "BACKEND_BASE_URL", "\"http://10.0.2.2:8080/\"")
+            buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"debug-token\"")
         }
         release {
             isMinifyEnabled = true
@@ -33,7 +33,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BACKEND_BASE_URL", "\"https://api.example.com/\"")
+            buildConfigField("String", "BACKEND_BASE_URL", "\"https://api.yourdomain.com/\"")
+            buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"prod-token\"")
         }
     }
 

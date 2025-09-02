@@ -1,6 +1,6 @@
 <!-- android-app/app/src/main/AndroidManifest.xml -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com..example.pitchsnap">
+    package="com.example.pichsnap">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Optional: persist URIs you pick from SAF -->

@@ -2,7 +2,6 @@
 package com.example.pichsnap;
 
 import com.example.pichsnap.SummaryResponse;
-
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Header;

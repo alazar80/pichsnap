@@ -3,15 +3,12 @@ package com.example.pichsnap;
 
 import android.app.Application;
 import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.pichsnap.SummaryResponse;
 import com.example.pichsnap.DeckRepository;
-
 import java.util.concurrent.Executors;
 
 public class DeckViewModel extends AndroidViewModel {

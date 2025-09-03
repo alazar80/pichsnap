@@ -3,15 +3,11 @@ package com.example.pichsnap;
 import android.app.Application;
 import android.content.ContentResolver;
 import android.net.Uri;
-
 import androidx.annotation.WorkerThread;
 import androidx.room.Room;
-
 import com.google.gson.Gson;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

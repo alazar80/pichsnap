@@ -18,13 +18,13 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // used in ApiClient/DeckRepository
-        buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.1.3/\"")
+        buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.1.3:3000/\"")
         buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"CHANGE_ME_DEV_TOKEN\"")
     }
 
     buildTypes {
         debug {
-            buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.1.3/\"")
+            buildConfigField("String", "BACKEND_BASE_URL", "\"http://10.0.2.2:8080/\"")
             buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"debug-token\"")
         }
         release {

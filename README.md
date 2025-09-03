@@ -1,4 +1,4 @@
-# 📱 PichSnap (PitchSnap) — AI Pitch Deck Summarizer
+# 📱 PitchSnap (PitchSnap) — AI Pitch Deck Summarizer
 > Summarize any pitch deck in 60 seconds — on mobile.
 
 [![Android](https://img.shields.io/badge/Android-Java-green.svg)](https://developer.android.com)

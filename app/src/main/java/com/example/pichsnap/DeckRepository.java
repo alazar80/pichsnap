@@ -31,12 +31,12 @@ public class DeckRepository {
     public SummaryResponse summarize(Uri fileUri, String fileName) throws Exception {
         // read the file into memory (simple & reliable for small PDFs/images)
         byte[] bytes = readAll(app.getContentResolver(), fileUri);
-        RequestBody body = RequestBody.create(MediaType.parse("application/octet-stream"), bytes);
+        RequestBody body = RequestBody.create(MediaType.parse("application/pdf"), bytes);
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", fileName, body);
 
         // call backend with token from BuildConfig
-        Call<SummaryResponse> call = ApiClient.get()
-                .summarize("Bearer " + BuildConfig.BACKEND_AUTH_TOKEN, filePart);
+        Call<SummaryResponse> call = ApiClient.get().summarize(filePart);
+
 
         Response<SummaryResponse> resp = call.execute();
         if (!resp.isSuccessful() || resp.body() == null) {

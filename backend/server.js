@@ -65,7 +65,7 @@ TEXT:
 """${text}"""`;
 
     const resp = await openai.responses.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4o',
       input: [
         { role: 'system', content: system },
         { role: 'user', content: user }

@@ -12,8 +12,6 @@ import retrofit2.http.Part;
 public interface ApiService {
     @Multipart
     @POST("summarize")
-    Call<SummaryResponse> summarize(
-            @Header("Authorization") String bearerToken,
-            @Part MultipartBody.Part filePart
-    );
+    Call<SummaryResponse> summarize(@Part MultipartBody.Part filePart);
+
 }

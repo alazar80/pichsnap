@@ -18,7 +18,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // used in ApiClient/DeckRepository
-        buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.1.3:3000/\"")
+        buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.147.101:3000/\"")
         buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"CHANGE_ME_DEV_TOKEN\"")
     }
 
@@ -33,7 +33,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BACKEND_BASE_URL", "\"https://192.168.1.3/\"")
+            buildConfigField("String", "BACKEND_BASE_URL", "\"https://192.168.147.101/\"")
             buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"prod-token\"")
         }
     }

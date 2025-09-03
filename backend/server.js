@@ -102,4 +102,7 @@ function safeParseJson(s) {
 }
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log('PitchSnap API on :' + port));
+app.listen(port, "0.0.0.0", () =>
+  console.log("PitchSnap API on :" + port)
+);
+

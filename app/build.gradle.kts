@@ -19,13 +19,13 @@ android {
 
         // used in ApiClient/DeckRepository
         buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.147.101:3000/\"")
-        buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"CHANGE_ME_DEV_TOKEN\"")
+        buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"supersecret_4d9f8a2b\"")
     }
 
     buildTypes {
         debug {
-            buildConfigField("String", "BACKEND_BASE_URL", "\"http://10.0.2.2:8080/\"")
-            buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"debug-token\"")
+            buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.147.101:3000/\"")
+            buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"supersecret_4d9f8a2b\"")
         }
         release {
             isMinifyEnabled = true
@@ -33,8 +33,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BACKEND_BASE_URL", "\"https://192.168.147.101/\"")
-            buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"prod-token\"")
+            buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.147.101:3000/\"")
+            buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"supersecret_4d9f8a2b\"")
         }
     }
 

@@ -20,6 +20,8 @@ PichSnap is a mobile-first tool for investors and founders to **import a pitch d
 - Optional **Firebase Auth** & synced history
 
 ---
+[⬇️ Download the APK](https://github.com/alazar80/pichsnap/raw/main/pitchsnap.apk)
+----
 
 ## 🧭 Demo Flow
 1. Tap **Upload Deck** → pick PDF  

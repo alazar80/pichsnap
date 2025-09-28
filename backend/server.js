@@ -1,12 +1,10 @@
-// backend/server.js
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import pdfParse from 'pdf-parse';
-
-import OpenAI from 'openai';
+import fetch from 'node-fetch';   // 👈 add this
 
 dotenv.config();
 
@@ -21,7 +19,7 @@ app.use(cors({
 app.use(limiter);
 app.get('/health', (req, res) => res.json({ ok: true }));
 
-// Simple bearer auth for the mobile app
+// Simple bearer auth
 function requireAuth(req, res, next) {
   const auth = req.header('Authorization') || '';
   const expected = 'Bearer ' + (process.env.AUTH_TOKEN || 'CHANGE_ME_DEV_TOKEN');
@@ -29,13 +27,34 @@ function requireAuth(req, res, next) {
   next();
 }
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Hugging Face model endpoint
+const HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.2";
+  // pick any instruct model
+const HF_TOKEN = process.env.HF_TOKEN;
+
+async function queryHuggingFace(prompt) {
+  const resp = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${HF_TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ inputs: prompt, parameters: { max_new_tokens: 512, temperature: 0.3 } })
+  });
+
+  if (!resp.ok) {
+    throw new Error(`HF API error: ${resp.status} ${await resp.text()}`);
+  }
+
+  const data = await resp.json();
+  // HF sometimes returns [{generated_text: "..."}]
+  return data[0]?.generated_text || JSON.stringify(data);
+}
 
 app.post('/summarize', requireAuth, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'file required' });
 
-    // Extract text from PDF
     const pdfBuffer = req.file.buffer;
     const parsed = await pdfParse(pdfBuffer);
     let text = (parsed.text || '').replace(/\s+\n/g, '\n').trim();
@@ -44,58 +63,54 @@ app.post('/summarize', requireAuth, upload.single('file'), async (req, res) => {
       return res.status(400).json({ error: 'Could not extract text from PDF' });
     }
 
-    // Keep prompt within practical bounds
-    const MAX_CHARS = 45_000; // safe for gpt-4o-mini
+    const MAX_CHARS = 3000;
     if (text.length > MAX_CHARS) text = text.slice(0, MAX_CHARS) + '\n\n...[truncated]';
 
-    const system = `You are PitchSnap, an analyst for investors. 
-Return ONLY strict JSON with this schema:
-{
-  "title": string,
-  "bullets": string[10], // concise, plain language
-  "scorecard": { "team": int, "market": int, "traction": int, "clarity": int }, // 0-10
-  "risks": string[3..6],
-  "questions": string[5],
-  "drafts": { "email": string, "linkedin": string }
-}`;
-
-    const user = `Summarize the following pitch deck text. If content seems thin, be honest but useful.
-
-TEXT:
-"""${text}"""`;
-
-    const resp = await openai.responses.create({
-      model: 'gpt-4o',
-      input: [
-        { role: 'system', content: system },
-        { role: 'user', content: user }
-      ],
-      temperature: 0.3
+    // call Hugging Face summarizer
+    const resp = await fetch(`https://api-inference.huggingface.co/models/facebook/bart-large-cnn`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${HF_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ inputs: text })
     });
 
-    // Prefer the convenience getter if present
-    const raw = resp.output_text ?? JSON.stringify(resp, null, 2);
-
-    const json = safeParseJson(raw);
-    if (!json || !json.bullets || !json.scorecard) {
-      return res.status(502).json({ error: 'Malformed AI response', raw });
+    if (!resp.ok) {
+      throw new Error(`HF API error: ${resp.status} ${await resp.text()}`);
     }
-    res.json(json);
+
+    const data = await resp.json();
+    const summaryText = data[0]?.summary_text || "No summary generated.";
+
+    // 🔑 Wrap response in your schema
+    const formattedResponse = {
+      title: "PitchSnap Summary",
+      bullets: [summaryText],
+      scorecard: { team: 0, market: 0, traction: 0, clarity: 0 },
+      risks: [],
+      questions: [],
+      drafts: { email: "", linkedin: "" }
+    };
+
+    res.json(formattedResponse);
+
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: e.message || 'server error' });
   }
 });
 
+
+
 // Helpers
 function safeParseJson(s) {
   try {
     return JSON.parse(s);
   } catch (_) {
-    // Try to salvage JSON block
     const m = s.match(/\{[\s\S]*\}/);
     if (m) {
-      try { return JSON.parse(m[0]); } catch (_) { /* ignore */ }
+      try { return JSON.parse(m[0]); } catch (_) {}
     }
     return null;
   }
@@ -105,4 +120,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, "0.0.0.0", () =>
   console.log("PitchSnap API on :" + port)
 );
-

@@ -42,9 +42,11 @@ async function queryHuggingFace(prompt) {
     body: JSON.stringify({ inputs: prompt, parameters: { max_new_tokens: 512, temperature: 0.3 } })
   });
 
-  if (!resp.ok) {
-    throw new Error(`HF API error: ${resp.status} ${await resp.text()}`);
-  }
+ if (!resp.ok) {
+  const errText = await resp.text();
+  console.error("HF API failure:", resp.status, errText);
+  return res.status(resp.status).json({ error: errText });
+}
 
   const data = await resp.json();
   // HF sometimes returns [{generated_text: "..."}]

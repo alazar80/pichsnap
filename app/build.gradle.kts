@@ -19,7 +19,6 @@ android {
 
         // used in ApiClient/DeckRepository
         buildConfigField("String", "BACKEND_BASE_URL", "\"https://pichsnap.onrender.com/\"")
-
         buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"supersecret_4d9f8a2b\"")
     }
 
@@ -38,7 +37,6 @@ android {
             buildConfigField("String", "BACKEND_AUTH_TOKEN", "\"supersecret_4d9f8a2b\"")
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -57,7 +55,6 @@ dependencies {
     // Room (Java)
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
-
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
